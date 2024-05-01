@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sentiment Analysis by Ajrizple</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f4f4f4;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .container {
+            background-color: white;
+            border-radius: 8px;
+            padding: 40px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            margin-top: 50px;
+        }
+        .btn-primary {
+            background-color: #007bff;
+            border: none;
+        }
+        .result {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #e9ecef;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        .positive { color: #28a745; }
+        .negative { color: #dc3545; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="text-center mb-4">Sentiment Analysis Tool</h1>
+        <div class="input-group mb-3">
+            <input type="text" class="form-control" id="textInput" placeholder="Enter text here..." aria-label="Text input for sentiment analysis">
+            <div class="input-group-append">
+                <button class="btn btn-primary" type="button" onclick="getSentiment()">Analyze</button>
+            </div>
+        </div>
+        <div id="result" class="result"></div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        function getSentiment() {
+            var text = document.getElementById('textInput').value;
+            $.get('/sentiment', { text: text }, function(data) {
+                var results = JSON.parse(data);
+                var output = '';
+                results.forEach(function(result) {
+                    var colorClass = result.className === 'Positive' ? 'positive' : 'negative';
+                    output += '<span class="' + colorClass + '">' + result.className + ': ' + (result.probability * 100).toFixed(2) + '%</span><br>';
+                });
+                document.getElementById('result').innerHTML = output;
+            }).fail(function() {
+                document.getElementById('result').innerHTML = "Error: Could not retrieve data";
+            });
+        }
+    </script>
+</body>
+</html>

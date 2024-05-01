@@ -1,0 +1,15 @@
+Create  resource:
+az group create --name mdm-projekt2-ajrizple --location switzerlandnorth    
+
+Create Plan:
+az appservice plan create --name mdm-projekt2-ajrizple --resource-group mdm-projekt2-ajrizple --sku F1 --is-linux       
+
+Create WebApp:
+az webapp create --resource-group mdm-projekt2-ajrizple --plan mdm-projekt2-ajrizple --name mdm-projekt2-ajrizple --deployment-container-image-name pleuzhaw/sentinmentanalysisbyajrizple:latest
+
+Config Port:
+az webapp config appsettings set --resource-group mdm-projekt2-ajrizple --name mdm-projekt2-ajrizple --settings WEBSITES_PORT=8080 
+
+DJL-Serving Docker: 
+docker run -d -p 8080:8080 deepjavalibrary/djl-serving:0.26.0
+
